@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">FoodSorter</string>
+    <string name="food_title_hint">Give your food a name.</string>
+    <string name="food_title_label">Food Name</string>
+    <string name="food_serving_label">Serving Size</string>
+    <string name="food_calorie_label">Calories</string>
+    <string name="food_fat_label">Fat</string>
+    <string name="food_cholesterol_label">Cholesterol</string>
+    <string name="food_sodium_label">Sodium</string>
+    <string name="food_carbs_label">Carbohydrates</string>
+    <string name="food_fiber_label">Fiber</string>
+    <string name="food_sugars_label">Sugars</string>
+    <string name="food_protein_label">Protein</string>
+    <string name="new_food">New Food</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle_format">%1$s foods</string>
+
+</resources>
