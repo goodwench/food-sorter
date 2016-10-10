@@ -55,7 +55,7 @@ public class FoodFetcher {
     }
 
     public List<Food> fetchItems() {
-        List<Food> mFoods = new ArrayList<>();
+        
         try {
             String url = Uri.parse("https://food-sorter-api.herokuapp.com/records")
                     .buildUpon()
@@ -65,19 +65,20 @@ public class FoodFetcher {
             String jsonString = getUrlString(url);
             Log.i(TAG, "Received JSON: " + jsonString);
             JSONArray jsonBody = new JSONArray(jsonString);
-            parseItems(mFoods, jsonBody);
+            
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse JSON", je);
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch items", ioe);
         }
 
-        return mFoods;
+        return parseItems(jsonBody);;
     }
 
-    private void parseItems(List<Food> mFoods, JSONArray jsonBody)
+    private List<Food> parseItems(JSONArray jsonBody)
         throws IOException, JSONException {
 
+        List<Food> mFoods = new ArrayList<>();
 
         for (int i = 0; i < jsonBody.length(); i++) {
             JSONObject foodJsonObject = jsonBody.getJSONObject(i);
@@ -99,7 +100,11 @@ public class FoodFetcher {
 
             Log.i(TAG, "Log Item: " + item);
 
+            mFoods.add(item);
+
         }
+
+        return mFoods;
 
 
     }
