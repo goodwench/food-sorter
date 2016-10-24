@@ -28,6 +28,10 @@ public class Food {
         return mId;
     }
 
+    public String toString() {
+        return mTitle;
+    }
+
     public String getfId() {
         return fId;
     }

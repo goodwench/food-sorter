@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,11 +45,17 @@ public class FoodListFragment extends Fragment {
 
         mFoodRecyclerView = (RecyclerView) view
                 .findViewById(R.id.food_recycler_view);
-        mFoodRecyclerView.setLayoutManager( new LinearLayoutManager(getActivity()));
+        mFoodRecyclerView.setLayoutManager( new GridLayoutManager(getActivity(), 3));
 
-        updateUI();
+        setupAdapter();
 
         return view;
+    }
+
+    private void setupAdapter() {
+        if(isAdded()) {
+            mFoodRecyclerView.setAdapter(new FoodAdapter(mFoods));
+        }
     }
 
     @Override
@@ -91,10 +98,7 @@ public class FoodListFragment extends Fragment {
 
     }
 
-    private class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-
-        private Food mFood;
+    private class FoodHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitleTextView;
         private TextView mServingsTextView;
@@ -110,30 +114,14 @@ public class FoodListFragment extends Fragment {
 
         public FoodHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
 
-            mTitleTextView = (TextView)
-                    itemView.findViewById(R.id.list_item_food_title_text_view);
-
-
-
-            mCaloriesTextView = (TextView)
-                    itemView.findViewById(R.id.list_item_food_calories_text_view);
-
-
-
+            mTitleTextView = (TextView) itemView;
+            mServingsTextView = (TextView) itemView;
         }
 
-        public void bindFood(Food food) {
-            mFood = food;
-            mTitleTextView.setText(mFood.getTitle());
-            mCaloriesTextView.setText(mFood.getCalories());
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = FoodPagerActivity.newIntent(getActivity(), mFood.getId());
-            startActivity(intent);
+        public void bindFoodItem(Food item) {
+            mTitleTextView.setText(item.toString());
+            mServingsTextView.setText(item.toString());
         }
     }
 
@@ -146,17 +134,16 @@ public class FoodListFragment extends Fragment {
         }
 
         @Override
-        public FoodHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater
-                    .inflate(R.layout.list_item_food, parent, false);
-            return new FoodHolder(view);
+        public FoodHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+            TextView textView = new TextView(getActivity());
+            return new FoodHolder(textView);
         }
 
         @Override
-        public void onBindViewHolder(FoodHolder holder, int position) {
-            Food food = mFoods.get(position);
-            holder.bindFood(food);
+        public void onBindViewHolder(FoodHolder foodHolder, int position) {
+            Food foodItem = mFoods.get(position);
+            foodHolder.bindFoodItem(foodItem);
+
         }
 
         @Override
@@ -165,22 +152,22 @@ public class FoodListFragment extends Fragment {
         }
     }
 
-    private class FetchItemsTask extends AsyncTask<Void,Void,List<Food>> {
+    private class FetchItemsTask extends AsyncTask<Void,Void, List<Food>> {
         @Override
         protected List<Food> doInBackground(Void... params) {
-            return new FoodFetcher().fetchItems();
+           return new FoodFetcher().fetchItems();
 
 
-            //FoodLab.get(getActivity()).addFood(mFoods);
+
         }
 
         @Override
-        protected void onPostExecute(List<Food> foods) {
-
-            mFoods = foods;
-
-            updateUI();
+        protected void onPostExecute(List<Food> items) {
+            mFoods = items;
+            setupAdapter();
         }
+
+
     }
 
 }

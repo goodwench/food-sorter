@@ -63,8 +63,9 @@ public class FoodFetcher {
                     .build().toString();
 
             String jsonString = getUrlString(url);
-            Log.i(TAG, "Received JSON: " + jsonString);
+
             JSONArray jsonBody = new JSONArray(jsonString);
+            Log.i(TAG, "Received JSON: " + jsonBody);
             parseItems(mFoods, jsonBody);
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse JSON", je);
@@ -75,13 +76,15 @@ public class FoodFetcher {
         return mFoods;
     }
 
-    private void parseItems(List<Food> mFoods, JSONArray jsonBody)
+    private void parseItems(List<Food> items, JSONArray jsonBody)
         throws IOException, JSONException {
 
 
-        for (int i = 0; i < jsonBody.length(); i++) {
-            JSONObject foodJsonObject = jsonBody.getJSONObject(i);
 
+        for (int i = 0; i < jsonBody.length(); i++) {
+
+            JSONObject foodJsonObject = jsonBody.getJSONObject(i);
+            
             Food item = new Food();
 
             item.setfId(foodJsonObject.getString("_id"));
@@ -96,7 +99,7 @@ public class FoodFetcher {
             item.setSugars(foodJsonObject.getString("sugars"));
             item.setProtein(foodJsonObject.getString("protein"));
 
-
+            items.add(item);
             Log.i(TAG, "Log Item: " + item);
 
         }
