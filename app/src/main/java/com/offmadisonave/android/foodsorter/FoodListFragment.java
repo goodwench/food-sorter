@@ -121,7 +121,7 @@ public class FoodListFragment extends Fragment {
 
         public void bindFoodItem(Food item) {
             mTitleTextView.setText(item.toString());
-            mServingsTextView.setText(item.toString());
+            
         }
     }
 
